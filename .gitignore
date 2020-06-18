@@ -1,3 +1,4 @@
 example/build
+example/.gradle
 .idea
 identityserver.plugins.authenticationactions.redirect-action/target
