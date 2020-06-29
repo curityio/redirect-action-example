@@ -48,7 +48,7 @@ public final class RedirectActionAuthenticationAction implements AuthenticationA
     private final SessionManager _sessionManager;
     private final String _redirectURI;
 
-    public RedirectActionAuthenticationAction(RedirectActionAuthenticationActionConfig configuration) throws URISyntaxException
+    public RedirectActionAuthenticationAction(RedirectActionAuthenticationActionConfig configuration)
     {
         _client = getWebServiceClient(configuration, configuration.getRedirectURL() + configuration.getResultPath());
         _jsonService = configuration.getJsonService();
@@ -81,16 +81,24 @@ public final class RedirectActionAuthenticationAction implements AuthenticationA
 
             Map<String, Object> responseJson = response.body(HttpResponse.asJsonObject(_jsonService));
 
-            String externalUserId = (String) responseJson.get("externalUserId");
-            String externalStatus = (String) responseJson.get("externalStatus");
+            Object externalUserIdObject = responseJson.get("externalUserId");
 
-            _logger.debug("Adding data to authentication: {}, {}", externalUserId, externalStatus);
-            authenticationAttributes.append(Attribute.of("externalUserId", externalUserId));
-            authenticationAttributes.append(Attribute.of("externalStatus", externalStatus));
+            if (externalUserIdObject instanceof String) {
+                String externalUserId = (String) externalUserIdObject;
+                _logger.debug("Adding external User ID to authentication: {}", externalUserId);
+                authenticationAttributes.append(Attribute.of("externalUserId", externalUserId));
+            }
+
+            Object externalStatusObject = responseJson.get("externalStatus");
+
+            if (externalStatusObject instanceof String) {
+                String externalStatus = (String) externalStatusObject;
+                _logger.debug("Adding external status to authentication: {}", externalStatus);
+                authenticationAttributes.append(Attribute.of("externalStatus", externalStatus));
+            }
 
             return AuthenticationActionResult.successfulResult(authenticationAttributes);
         }
-
 
     }
 

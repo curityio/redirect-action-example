@@ -15,7 +15,6 @@
  */
 package io.curity.example.redirectaction.redirect;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,7 +29,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-public class RedirectController
+public final class RedirectController
 {
     private final Map<String, String> cache = new HashMap<>();
 
@@ -52,7 +51,7 @@ public class RedirectController
         return new ResponseData(userId, "ACTIVE");
     }
 
-    private static class ResponseData {
+    private final static class ResponseData {
         private final String externalUserId;
         private final String externalStatus;
 
@@ -73,10 +72,10 @@ public class RedirectController
         }
     }
 
-    private static class NotFoundException extends RuntimeException {}
+    private final static class NotFoundException extends RuntimeException {}
 
     @ControllerAdvice
-    private static class ExceptionController {
+    private final static class ExceptionController {
 
         @ExceptionHandler(NotFoundException.class)
         @ResponseStatus(HttpStatus.NOT_FOUND)

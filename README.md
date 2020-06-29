@@ -22,7 +22,7 @@ To run the example follow these steps:
   to check how to do it.
 - When the plugin is installed go to the admin UI, then **Authentication Profile** -> **Authenticators**.
   Edit an authenticator of your choice.
-- If you want to run the example with a local instance of the Spring application you'll need an http client which uses
+- If you want to run the example with a local instance of the Spring application you'll need an HTTP client which uses
   the `http` scheme. To add such client click the `Facilities` button in the top right corner of the screen, scroll down
   to **Http clients** and click the `New` button.
 - Enter a suitable name for the client and click `Create`.
