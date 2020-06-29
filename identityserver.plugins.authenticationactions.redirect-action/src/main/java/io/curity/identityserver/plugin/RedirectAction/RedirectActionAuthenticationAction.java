@@ -81,21 +81,16 @@ public final class RedirectActionAuthenticationAction implements AuthenticationA
 
             Map<String, Object> responseJson = response.body(HttpResponse.asJsonObject(_jsonService));
 
-            Object externalUserIdObject = responseJson.get("externalUserId");
+            Object externalUserId = responseJson.get("externalUserId");
+            Object externalStatus = responseJson.get("externalStatus");
 
-            if (externalUserIdObject instanceof String) {
-                String externalUserId = (String) externalUserIdObject;
-                _logger.debug("Adding external User ID to authentication: {}", externalUserId);
-                authenticationAttributes.append(Attribute.of("externalUserId", externalUserId));
+            if (!(externalUserId instanceof String) || !(externalStatus instanceof String)) {
+                throw new IllegalStateException("externalUserId and externalStatus should both have type String!");
             }
 
-            Object externalStatusObject = responseJson.get("externalStatus");
-
-            if (externalStatusObject instanceof String) {
-                String externalStatus = (String) externalStatusObject;
-                _logger.debug("Adding external status to authentication: {}", externalStatus);
-                authenticationAttributes.append(Attribute.of("externalStatus", externalStatus));
-            }
+            _logger.debug("Adding external data to authentication: {}, {}", externalUserId, externalStatus);
+            authenticationAttributes.append(Attribute.of("externalUserId", externalUserId.toString()));
+            authenticationAttributes.append(Attribute.of("externalStatus", externalStatus.toString()));
 
             return AuthenticationActionResult.successfulResult(authenticationAttributes);
         }
