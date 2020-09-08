@@ -1,7 +1,7 @@
 # Redirect Action Example
 
-[![Quality](https://curity.io/assets/images/badges/redirect-action-example-quality.svg)](https://curity.io/resources/code-examples/status/) 
-[![Availability](https://curity.io/assets/images/badges/redirect-action-example-availability.svg)](https://curity.io/resources/code-examples/status/)
+[![Quality](https://img.shields.io/badge/quality-demo-red)](https://curity.io/resources/code-examples/status/)
+[![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
 This repository is an example of an Authentication Action Plugin for the
 Curity Identity Server, which uses the `redirect()` response type. It consists
