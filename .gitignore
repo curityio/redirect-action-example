@@ -1,4 +1,7 @@
-example/build
-example/.gradle
+example/target
 .idea
 identityserver.plugins.authenticationactions.redirect-action/target
+tests/node_modules
+tests/cypress/reports
+.secrets
+utils/

@@ -1,0 +1,52 @@
+name: end-to-end-github-authenticator-tests
+on: workflow_dispatch
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure domain for example redirect service
+        run: echo "127.0.0.1 redirect.example.com" >> /etc/hosts
+      - name: Checkout repository with pluign
+        uses: actions/checkout@v3
+      - name: Checkout the utils repository
+        uses: actions/checkout@v3
+        with:
+          repository: curityio/github-actions-utilities
+          path: utils
+
+      - name: Setup Java with maven cache
+        if: ${{ !env.ACT }} # Run only in GitHub
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: maven
+
+      - name: Build plugin
+        run: cd identityserver.plugins.authenticationactions.redirect-action && mvn package
+
+      - name: Move plugin jar to volume dir
+        run: mv identityserver.plugins.authenticationactions.redirect-action/target/*.jar plugin/
+
+      - name: Start the Curity Identity Server
+        env:
+          TEST_LICENSE: ${{ secrets.idsvr_license }}
+        run: docker run -d --rm --add-host=redirect.example.com:host-gateway -e PASSWORD=Password1 -e TEST_LICENSE=$TEST_LICENSE -v $GITHUB_WORKSPACE/plugin:/opt/idsvr/usr/share/plugins/redirect-action -v $GITHUB_WORKSPACE/tests/idsvr/config.xml:/opt/idsvr/etc/init/config.xml -p 6749:6749 -p 8443:8443 curity.azurecr.io/curity/idsvr:latest
+
+      - name: Wait for the Curity Identity Server
+        run: ./utils/scripts/healthCheckIdsvr.sh
+        env:
+          ADMIN_USER: admin
+          ADMIN_PASSWORD: Password1
+          WAIT_TIMEOUT: 60
+
+      - name: Build the example app
+        run: cd example && mvn install
+      - name: Start the example app
+        run: cd example && mvn spring-boot:start
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: tests
+          waitOn: http://localhost:8080
