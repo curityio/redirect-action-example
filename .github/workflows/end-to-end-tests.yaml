@@ -46,7 +46,7 @@ jobs:
         run: cd example && mvn spring-boot:start
 
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v3
         with:
           working-directory: tests
           waitOn: http://localhost:8080

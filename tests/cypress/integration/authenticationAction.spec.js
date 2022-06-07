@@ -14,46 +14,33 @@
  * limitations under the License.
  */
 
+import { registerCurityCommands } from "@curity/cypress-commands"
+
+registerCurityCommands()
+
 describe('Redirect Authentication Action tests', () => {
   it('Verify that the Action properly redirects the user to the external system and sets data in the Subject Attributes bag.',  () => {
 
-    const authorizationURL = new URL('https://localhost:8443/oauth/v2/oauth-authorize')
-    const params = authorizationURL.searchParams
-
-    params.append('client_id', 'oauth-assistant-client')
-    params.append('response_type', 'code id_token')
-    params.append('redirect_uri', 'http://localhost:8080/')
-    params.append('prompt', 'login')
-    params.append('scope', 'openid')
-    params.append('nonce', '1234')
+      const parameters = {
+          baseURL: 'https://localhost:8443/oauth/v2/oauth-authorize',
+          clientID: 'oauth-assistant-client',
+          redirectURI: 'http://localhost:8080/',
+          responseType: 'code id_token',
+          scope: 'openid',
+          extraParams: new Map([['nonce', '1234']])
+      }
 
     // Start the authorization flow
-    cy.visit(authorizationURL.toString())
+    cy.startAuthorization(parameters)
 
     // Enter username and click "Next"
     cy.get('#username').type("test")
     cy.get('button[type=submit]').click()
 
     // Verify that id_token returned contains the external_user_id claim
-    cy.url()
-        .should('contain', '#')
-        .should('contain', 'id_token')
-        .then(url => {
-          const idToken = url.split('#')[1]
-          expect(idToken).not.to.be.empty
-
-          const claims = decodeJWT(idToken)
-          expect(claims).to.contain("external_user_id")
-        })
+    cy.getIDTokenClaims().then(claims => {
+        expect(claims.external_user_id).to.exist
+        expect(claims.external_status).to.exist.and.equal('ACTIVE')
+    })
   })
-
 })
-
-const decodeJWT = (token) => {
-  const payload = token.split('.')[1]
-  expect(payload).not.to.be.empty
-
-  return decodeURIComponent(Array.prototype.map.call(atob(payload.replace('-', '+').replace('_', '/')), c =>
-      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-  ).join(''))
-}
