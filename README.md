@@ -10,7 +10,7 @@ of two parts:
 - the plugin code is in the `identityserver.plugins.authenticationactions.redirect-action` directory
 - `example` directory which contains a simple demo website to which the plugin action redirects. The demo is written
   in Java and Spring.
-
+ 
 ## Running the example
 
 To run the example follow these steps:
