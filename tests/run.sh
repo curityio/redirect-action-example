@@ -5,8 +5,8 @@
 # First install the act and jq tools, eg by brew install act
 ##################################################################
 
-LICENSE_FILE_PATH=~/.curity/license.json
-GITHUB_PERSONAL_ACCESS_TOKEN=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
+LICENSE_FILE_PATH=
+GITHUB_PERSONAL_ACCESS_TOKEN=
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
