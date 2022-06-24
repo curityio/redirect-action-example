@@ -1,5 +1,11 @@
 name: end-to-end-github-authenticator-tests
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      curityVersion:
+        description: 'The Curity Identity Server container tag'
+        required: true
+        default: 'latest'
 jobs:
   run-test:
     runs-on: ubuntu-latest
@@ -31,7 +37,7 @@ jobs:
       - name: Start the Curity Identity Server
         env:
           TEST_LICENSE: ${{ secrets.idsvr_license }}
-        run: docker run -d --rm --add-host=redirect.example.com:host-gateway -e PASSWORD=Password1 -e TEST_LICENSE=$TEST_LICENSE -v $GITHUB_WORKSPACE/plugin:/opt/idsvr/usr/share/plugins/redirect-action -v $GITHUB_WORKSPACE/tests/idsvr/config.xml:/opt/idsvr/etc/init/config.xml -p 6749:6749 -p 8443:8443 curity.azurecr.io/curity/idsvr:latest
+        run: docker run -d --rm --add-host=redirect.example.com:host-gateway -e PASSWORD=Password1 -e TEST_LICENSE=$TEST_LICENSE -v $GITHUB_WORKSPACE/plugin:/opt/idsvr/usr/share/plugins/redirect-action -v $GITHUB_WORKSPACE/tests/idsvr/config.xml:/opt/idsvr/etc/init/config.xml -p 6749:6749 -p 8443:8443 curity.azurecr.io/curity/idsvr:$INPUT_CURITYVERSION
 
       - name: Wait for the Curity Identity Server
         run: ./utils/scripts/healthCheckIdsvr.sh
