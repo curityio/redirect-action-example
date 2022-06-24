@@ -11,10 +11,7 @@ and ``externalStatus``. Values of these two fields are then added to the Authori
 Building the Plugin
 ~~~~~~~~~~~~~~~~~~~
 
-Ensure that the Curity Nexus server is `configured in your Maven settings
-<https://developer.curity.io/docs/latest/developer-guide/plugins/index.html#access-to-the-curity-release-repository>`_.
-Then, build the plugin by issuing the command ``mvn package``. This will produce a JAR file in the ``target`` directory,
-which can be installed.
+Build the plugin by issuing the command ``mvn package``. This will produce a JAR file in the ``target`` directory, which can be installed.
 
 Installing the Plugin
 ~~~~~~~~~~~~~~~~~~~~~

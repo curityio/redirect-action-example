@@ -18,6 +18,7 @@ package io.curity.identityserver.plugin.RedirectAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.attribute.Attribute;
+import se.curity.identityserver.sdk.attribute.Attributes;
 import se.curity.identityserver.sdk.attribute.AuthenticationAttributes;
 import se.curity.identityserver.sdk.authentication.AuthenticatedSessions;
 import se.curity.identityserver.sdk.authenticationaction.AuthenticationAction;
@@ -89,10 +90,15 @@ public final class RedirectActionAuthenticationAction implements AuthenticationA
             }
 
             _logger.debug("Adding external data to authentication: {}, {}", externalUserId, externalStatus);
-            authenticationAttributes.append(Attribute.of("externalUserId", externalUserId.toString()));
-            authenticationAttributes.append(Attribute.of("externalStatus", externalStatus.toString()));
+            var subjectAttributes = authenticationAttributes.getSubjectAttributes().append(
+                    Attributes.of(
+                            "externalUserId", externalUserId.toString(),
+                            "externalStatus", externalStatus.toString()
+                    ));
 
-            return AuthenticationActionResult.successfulResult(authenticationAttributes);
+            return AuthenticationActionResult.successfulResult(
+                    AuthenticationAttributes.of(subjectAttributes, authenticationAttributes.getContextAttributes())
+            );
         }
 
     }
