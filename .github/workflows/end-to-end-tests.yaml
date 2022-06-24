@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Configure domain for example redirect service
-        run: sudo echo "127.0.0.1 redirect.example.com" >> /etc/hosts
+        run: echo "127.0.0.1 redirect.example.com" | sudo tee -a /etc/hosts
       - name: Checkout repository with pluign
         uses: actions/checkout@v3
       - name: Checkout the utils repository
