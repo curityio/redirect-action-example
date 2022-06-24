@@ -164,6 +164,7 @@
               <claims>zoneinfo</claims>
             </scope>
             <default-scope-claim>external_user_id</default-scope-claim>
+            <default-scope-claim>external_status</default-scope-claim>
           </scopes>
           <claims>
             <claim>
@@ -191,6 +192,13 @@
               <value-provided-by>authentication-subject</value-provided-by>
               <transformation>
                 <input-attribute-names>externalUserId</input-attribute-names>
+              </transformation>
+            </claim>
+            <claim>
+              <name>external_status</name>
+              <value-provided-by>authentication-subject</value-provided-by>
+              <transformation>
+                <input-attribute-names>externalStatus</input-attribute-names>
               </transformation>
             </claim>
             <claim>
@@ -289,6 +297,7 @@
                   <claim>email</claim>
                   <claim>email_verified</claim>
                   <claim>external_user_id</claim>
+                  <claim>external_status</claim>
                   <claim>family_name</claim>
                   <claim>gender</claim>
                   <claim>given_name</claim>

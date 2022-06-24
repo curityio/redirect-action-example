@@ -27,7 +27,9 @@ describe('Redirect Authentication Action tests', () => {
           redirectURI: 'http://localhost:8080/',
           responseType: 'code id_token',
           scope: 'openid',
-          extraParams: new Map([['nonce', '1234']])
+          extraParams: {
+              nonce: '1234'
+          }
       }
 
     // Start the authorization flow
