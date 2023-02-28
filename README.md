@@ -65,7 +65,7 @@ You can then open the Cypress app to run tests with `npm run cypress.open` or ru
 
 ## Running the GitHub Actions Workflow Locally
 
-To run the GitHub Actions workflow locally refer to this [README](https://github.com/curityio/github-action-utilities).
+To run the GitHub Actions workflow locally refer to this [README](https://github.com/curityio/github-actions-utilities).
 Note that in order to run the workflow for this plugin you will need to run the Curity Identity Server directly in the
 `act` container, as described at the end of the linked README file.
 
