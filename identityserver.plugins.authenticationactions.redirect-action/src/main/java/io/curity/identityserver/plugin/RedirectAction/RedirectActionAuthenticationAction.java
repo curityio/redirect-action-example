@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 import se.curity.identityserver.sdk.attribute.Attribute;
 import se.curity.identityserver.sdk.attribute.Attributes;
 import se.curity.identityserver.sdk.attribute.AuthenticationAttributes;
-import se.curity.identityserver.sdk.authentication.AuthenticatedSessions;
 import se.curity.identityserver.sdk.authenticationaction.AuthenticationAction;
+import se.curity.identityserver.sdk.authenticationaction.AuthenticationActionContext;
 import se.curity.identityserver.sdk.authenticationaction.AuthenticationActionResult;
 import se.curity.identityserver.sdk.errors.ErrorCode;
 import se.curity.identityserver.sdk.http.HttpResponse;
@@ -30,7 +30,6 @@ import se.curity.identityserver.sdk.service.Json;
 import se.curity.identityserver.sdk.service.SessionManager;
 import se.curity.identityserver.sdk.service.WebServiceClient;
 import se.curity.identityserver.sdk.service.WebServiceClientFactory;
-import se.curity.identityserver.sdk.service.authenticationaction.AuthenticatorDescriptor;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -58,12 +57,10 @@ public final class RedirectActionAuthenticationAction implements AuthenticationA
     }
 
     @Override
-    public AuthenticationActionResult apply(AuthenticationAttributes authenticationAttributes,
-                                            AuthenticatedSessions authenticatedSessions,
-                                            String authenticationTransactionId,
-                                            AuthenticatorDescriptor authenticatorDescriptor)
+    public AuthenticationActionResult apply(AuthenticationActionContext context)
     {
-        String key = authenticationAttributes.getSubject() + authenticatorDescriptor.getId();
+        AuthenticationAttributes authenticationAttributes = context.getAuthenticationAttributes();
+        String key = authenticationAttributes.getSubject() + context.getAuthenticatorDescriptor().getId();
 
         Attribute parameterFromSession = _sessionManager.get(key);
 
